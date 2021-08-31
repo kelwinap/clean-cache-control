@@ -3,7 +3,7 @@ export interface SavePurchases {
 
 }
 
-namespace SavePurchases {
+export namespace SavePurchases {
     export type Params = {
         id: string,
         date: Date,
