@@ -6,15 +6,17 @@ class CacheStoreSpy implements CacheStore {
 
     deleteCallsCount = 0
     insertCallsCount = 0
-    key: string
+    deleteKey: string
+    insertKey: string
 
     delete(key: string): void {
         this.deleteCallsCount++
-        this.key = key
+        this.deleteKey = key
     }
 
-    insert(): void {
+    insert(key: string): void {
         this.insertCallsCount++
+        this.insertKey = key
     }
 }
 
@@ -42,7 +44,7 @@ describe('LocalSavePurchases', () => {
         const { cacheStore, sut } = makeSut()
         await sut.save()
         expect(cacheStore.deleteCallsCount).toBe(1)
-        expect(cacheStore.key).toBe('purchases')
+        expect(cacheStore.deleteKey).toBe('purchases')
     });
 
     test('should not insert new cache if delete fails', async () => {
@@ -58,5 +60,6 @@ describe('LocalSavePurchases', () => {
         await sut.save()
         expect(cacheStore.deleteCallsCount).toBe(1)
         expect(cacheStore.insertCallsCount).toBe(1)
+        expect(cacheStore.insertKey).toBe('purchases')
     });
 });
