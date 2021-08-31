@@ -18,20 +18,29 @@ class CacheStoreSpy implements CacheStore {
     }
 }
 
+type SutTypes = {
+    sut: LocalSavePurchases
+    cacheStore: CacheStoreSpy
+}
+
+const makeSut = (): SutTypes => {
+    const cacheStore = new CacheStoreSpy()
+    const sut = new LocalSavePurchases(cacheStore)
+    return {
+        sut,
+        cacheStore
+    }
+}
+
 describe('LocalSavePurchases', () => {
     test('should not delete cache on sut.init', () => {
-        const cacheStore = new CacheStoreSpy()
-        const sut = new LocalSavePurchases(cacheStore)
-
+        const { cacheStore } = makeSut()
         expect(cacheStore.deleteCallsCount).toBe(0)
     });
 
     test('should delete old cache on sut.save', async () => {
-        const cacheStore = new CacheStoreSpy()
-        const sut = new LocalSavePurchases(cacheStore)
-
+        const { cacheStore, sut } = makeSut()
         sut.save()
-
         expect(cacheStore.deleteCallsCount).toBe(1)
     });
 });
