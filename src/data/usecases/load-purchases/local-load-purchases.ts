@@ -33,4 +33,13 @@ export class LocalLoadPurchases implements SavePurchases, LoadPurchases {
             return []
         }
     }
+
+    validate(): void {
+        try {
+            const cache = this.cacheStore.fetch(this.key)
+        }
+        catch (error) {
+            this.cacheStore.delete(this.key)
+        }
+    }
 }
